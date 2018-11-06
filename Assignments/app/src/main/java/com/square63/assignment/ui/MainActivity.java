@@ -36,15 +36,17 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         setContentView(R.layout.activity_main);
         init();
     }
-    private void init(){
-        recyclerView = (RecyclerView)findViewById(R.id.recyclerViews);
+
+    private void init() {
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerViews);
         rltv_progressBar = (RelativeLayout) findViewById(R.id.rltv_progressBar);
-        txtCounter = (TextView)findViewById(R.id.txtCounter);
+        txtCounter = (TextView) findViewById(R.id.txtCounter);
         hintModelArrayList = new ArrayList<>();
-        setPaginationScroll();;
+        setPaginationScroll();
         setSwipeView();
         getPosts(pageIndex);
     }
+
     public void getPosts(int pageIndex) {
         WebServiceFactory.getInstance().init(this);
         WebServiceFactory.getInstance().apiGetPosts(pageIndex, new ApiCallback() {
@@ -60,32 +62,29 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     }
 
     private void setRecyclerView() {
-        if(pageIndex == 1){
-            postsAdapter = new PostsAdapter(hintModelArrayList , this);
+        if (pageIndex == 1) {
+            postsAdapter = new PostsAdapter(hintModelArrayList, this);
             mManager = new LinearLayoutManager(this);
             recyclerView.setLayoutManager(mManager);
             recyclerView.setAdapter(postsAdapter);
-        }else {
+        } else {
             postsAdapter.updateData(hintModelArrayList);
         }
 
     }
-    private void setPaginationScroll(){
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener()
-        {
+
+    private void setPaginationScroll() {
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy)
-            {
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
 
                 int visibleItemCount = mManager.getChildCount();
                 int totalItemCount = mManager.getItemCount();
                 int firstVisibleItemPosition = mManager.findFirstVisibleItemPosition();
 
-                if (!isLoading)
-                {
-                    if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount && firstVisibleItemPosition >= 0)
-                    {
+                if (!isLoading) {
+                    if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount && firstVisibleItemPosition >= 0) {
                         isLoading = true;
                         pageIndex++;
                         rltv_progressBar.setVisibility(View.VISIBLE);
@@ -97,19 +96,19 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(this, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                if(hintModelArrayList.get(position).isSelected()){
+                if (hintModelArrayList.get(position).isSelected()) {
                     hintModelArrayList.get(position).setSelected(false);
                     selectedCount--;
-                }else {
+                } else {
                     hintModelArrayList.get(position).setSelected(true);
                     selectedCount++;
                 }
-                if(selectedCount == 0)
-                txtCounter.setText("");
+                if (selectedCount == 0)
+                    txtCounter.setText("");
                 else
-                    txtCounter.setText(""+selectedCount);
+                    txtCounter.setText("" + selectedCount);
 
-                postsAdapter.updateItem(position,hintModelArrayList.get(position));
+                postsAdapter.updateItem(position, hintModelArrayList.get(position));
             }
         }));
 
@@ -119,14 +118,16 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     public void onRefresh() {
         resetList();
     }
-    private void resetList(){
+
+    private void resetList() {
         pageIndex = 1;
         hintModelArrayList = new ArrayList<>();
         selectedCount = 0;
         txtCounter.setText("");
         getPosts(pageIndex);
     }
-    private void setSwipeView(){
+
+    private void setSwipeView() {
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
         mSwipeRefreshLayout.setOnRefreshListener(this);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary,
