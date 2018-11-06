@@ -38,22 +38,16 @@ public class WebServiceFactory {
     public void apiGetPosts(int noOfPages ,final ApiCallback apiCallback) {
         checkNetworkState();
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-       // final ProgressDialog loading;
-       // loading = ProgressDialog.show(context_, context_.getResources().getString(R.string.loading), "", true, false);
-
-        Call<DataObject> signUpResponseCall = apiInterface.getPosts(Constants.STORY,""+noOfPages);
+         Call<DataObject> signUpResponseCall = apiInterface.getPosts(Constants.STORY,""+noOfPages);
         signUpResponseCall.enqueue(new Callback<DataObject>() {
             @Override
             public void onResponse(Call<DataObject> call, Response<DataObject> response) {
                 apiCallback.onSuccess(response.body().getHintModelArrayList());
-                //loading.dismiss();
             }
 
             @Override
             public void onFailure(Call<DataObject> call, Throwable t) {
                 Log.d("fail", t.getMessage());
-                //loading.dismiss();
-
             }
         });
 

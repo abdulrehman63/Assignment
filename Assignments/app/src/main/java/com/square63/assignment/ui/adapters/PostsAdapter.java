@@ -13,12 +13,13 @@ import com.square63.assignment.webapi.responses.HintModel;
 
 import java.util.ArrayList;
 
-public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.Viewholder>{
+public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.Viewholder> {
 
     private final ArrayList<HintModel> data;
     private Context context;
     private LayoutInflater layoutInflater;
     private ItemListPostBinding binding;
+
     public PostsAdapter(ArrayList<HintModel> data, Context context) {
         this.data = data;
         this.context = context;
@@ -27,10 +28,9 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.Viewholder>{
     @NonNull
     @Override
     public Viewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        if(layoutInflater == null)
+        if (layoutInflater == null)
             layoutInflater = LayoutInflater.from(parent.getContext());
-        binding = DataBindingUtil.inflate(layoutInflater, R.layout.item_list_post,parent,false);
-        // View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_review, parent, false);
+        binding = DataBindingUtil.inflate(layoutInflater, R.layout.item_list_post, parent, false);
         return new Viewholder(binding);
     }
 
@@ -39,12 +39,14 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.Viewholder>{
         holder.itemListPostBinding.setHintModel(data.get(position));
 
     }
-    public void updateData(ArrayList<HintModel> hintModelArrayList){
+
+    public void updateData(ArrayList<HintModel> hintModelArrayList) {
         data.addAll(hintModelArrayList);
         notifyDataSetChanged();
 
     }
-    public void updateItem(int position,HintModel hintModel){
+
+    public void updateItem(int position, HintModel hintModel) {
         data.get(position).setSelected(hintModel.isSelected());
         notifyItemChanged(position);
     }
@@ -57,6 +59,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.Viewholder>{
     class Viewholder extends RecyclerView.ViewHolder {
 
         ItemListPostBinding itemListPostBinding;
+
         public Viewholder(ItemListPostBinding itemListPostBinding) {
             super(itemListPostBinding.getRoot());
             this.itemListPostBinding = itemListPostBinding;

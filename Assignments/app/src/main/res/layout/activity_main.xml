@@ -36,7 +36,7 @@
     <RelativeLayout
         android:id="@+id/rltv_progressBar"
         android:layout_width="match_parent"
-        android:layout_height="85dp"
+        android:layout_height="@dimen/x85"
         android:background="@android:color/white"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -45,7 +45,7 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <ProgressBar
-            android:layout_width="40dp"
+            android:layout_width="@dimen/x40"
             android:layout_height="40dp"
             android:layout_centerInParent="true"
             android:indeterminateTint="@color/red" />

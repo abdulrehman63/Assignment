@@ -29,12 +29,6 @@ public class ApiClient  {
             OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor)
                     .connectTimeout(60, TimeUnit.SECONDS)
                     .readTimeout(100,TimeUnit.SECONDS).build();
-
-
-            Gson gson = new GsonBuilder()
-                    .setLenient()
-                    .create();
-            //OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
             retrofit = new Retrofit.Builder()
                     .baseUrl(BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create()).client(client)

@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.square63.assignment.Extras.Constants;
 import com.square63.assignment.R;
 import com.square63.assignment.listeners.ApiCallback;
 import com.square63.assignment.listeners.RecyclerItemClickListener;
@@ -24,11 +25,11 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     private RecyclerView recyclerView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private boolean isLoading;
-    private int pageIndex = 1;
+    private int pageIndex = Constants.ONE;
     private RelativeLayout rltv_progressBar;
     private ArrayList<HintModel> hintModelArrayList;
     private TextView txtCounter;
-    private int selectedCount = 0;
+    private int selectedCount = Constants.ZERO;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         rltv_progressBar = (RelativeLayout) findViewById(R.id.rltv_progressBar);
         txtCounter = (TextView) findViewById(R.id.txtCounter);
         hintModelArrayList = new ArrayList<>();
-        setPaginationScroll();
+        setPaginationScrollAndClick();
         setSwipeView();
         getPosts(pageIndex);
     }
@@ -62,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     }
 
     private void setRecyclerView() {
-        if (pageIndex == 1) {
+        if (pageIndex == Constants.ONE) {
             postsAdapter = new PostsAdapter(hintModelArrayList, this);
             mManager = new LinearLayoutManager(this);
             recyclerView.setLayoutManager(mManager);
@@ -73,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
     }
 
-    private void setPaginationScroll() {
+    private void setPaginationScrollAndClick() {
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -96,22 +97,28 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(this, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                if (hintModelArrayList.get(position).isSelected()) {
-                    hintModelArrayList.get(position).setSelected(false);
-                    selectedCount--;
-                } else {
-                    hintModelArrayList.get(position).setSelected(true);
-                    selectedCount++;
-                }
-                if (selectedCount == 0)
-                    txtCounter.setText("");
-                else
-                    txtCounter.setText("" + selectedCount);
-
-                postsAdapter.updateItem(position, hintModelArrayList.get(position));
+                //Handle toggle and selected counter
+                listItemSelectionHandler(position);
             }
         }));
 
+    }
+
+    private void listItemSelectionHandler(int position) {
+        if (hintModelArrayList.get(position).isSelected()) {
+            hintModelArrayList.get(position).setSelected(false);
+            selectedCount--;
+        } else {
+            hintModelArrayList.get(position).setSelected(true);
+            selectedCount++;
+        }
+
+        if (selectedCount == Constants.ZERO)
+            txtCounter.setText("");
+        else
+            txtCounter.setText("" + selectedCount);
+
+        postsAdapter.updateItem(position, hintModelArrayList.get(position));
     }
 
     @Override
@@ -120,9 +127,9 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     }
 
     private void resetList() {
-        pageIndex = 1;
+        pageIndex = Constants.ONE;
         hintModelArrayList = new ArrayList<>();
-        selectedCount = 0;
+        selectedCount = Constants.ZERO;
         txtCounter.setText("");
         getPosts(pageIndex);
     }
